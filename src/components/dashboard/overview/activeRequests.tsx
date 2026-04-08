@@ -4,6 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MyRequestItem } from "@/store/Apis/dashboard/myrequestApi/myrequestApi";
 import { BiDollarCircle } from "react-icons/bi";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 interface ActiveRequestsProps {
   requests: MyRequestItem[];
 }
@@ -12,25 +16,20 @@ interface ActiveRequestsProps {
 const formatDateDisplay = (dateStr: string | null): string => {
   if (!dateStr) return "";
   try {
-    const date = new Date(dateStr);
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    const date = dayjs.utc(dateStr);
+    const today = dayjs();
+    const tomorrow = dayjs().add(1, "day");
 
     // Check if it's today
-    if (date.toDateString() === today.toDateString()) {
+    if (date.format("YYYY-MM-DD") === today.format("YYYY-MM-DD")) {
       return "today";
     }
     // Check if it's tomorrow
-    if (date.toDateString() === tomorrow.toDateString()) {
+    if (date.format("YYYY-MM-DD") === tomorrow.format("YYYY-MM-DD")) {
       return "tomorrow";
     }
     // Otherwise format as "MMM DD, YYYY"
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+    return date.format("MMM D, YYYY");
   } catch {
     return "";
   }
@@ -75,7 +74,7 @@ export default function ActiveRequests({ requests }: ActiveRequestsProps) {
     return [...requests]
       .sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
       )
       .slice(0, 5);
   }, [requests]);

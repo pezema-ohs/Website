@@ -3,17 +3,16 @@ import React, { useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DollarSign } from "lucide-react";
 import { useGetPaymentQuery } from "@/store/Apis/paymentApi/paymentApi";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 // Format date for display
 const formatDateDisplay = (dateStr: string | null | undefined): string => {
   if (!dateStr) return "";
   try {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+    return dayjs.utc(dateStr).format("MMM D, YYYY");
   } catch {
     return "";
   }
@@ -39,7 +38,7 @@ export default function RecentTransactions() {
       .sort((a, b) => {
         const dateA = a.transactionDate || a.createdAt || "";
         const dateB = b.transactionDate || b.createdAt || "";
-        return new Date(dateB).getTime() - new Date(dateA).getTime();
+        return dayjs(dateB).valueOf() - dayjs(dateA).valueOf();
       })
       .slice(0, 10);
   }, [paymentData]);
