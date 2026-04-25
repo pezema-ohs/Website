@@ -155,7 +155,7 @@ export default function ContactDetails({
               "[&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
               "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
               "text-sm",
-              errors.contactNumber && "!border-red-500"
+              errors.contactNumber && "!border-red-500",
             )}
             // numberInputProps={{
             //   className: cn(
@@ -201,11 +201,10 @@ export default function ContactDetails({
               )}
             </div>
           </div>
-
         </div>
         {/* Instructional Text */}
         <p className="text-[11px] italic  text-gray-600 text-justify">
-          *{" "}{t("instructionalText.text")}
+          * {t("instructionalText.text")}
         </p>
         {/* Date of Birth */}
         <div>
@@ -216,11 +215,12 @@ export default function ContactDetails({
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={`w-full justify-between text-left font-normal ${errors.dateOfBirth ? "border-red-500" : ""
-                  }`}
+                className={`w-full justify-between text-left font-normal ${
+                  errors.dateOfBirth ? "border-red-500" : ""
+                }`}
               >
                 {formData.dateOfBirth &&
-                  formatDateDisplay(formData.dateOfBirth) ? (
+                formatDateDisplay(formData.dateOfBirth) ? (
                   formatDateDisplay(formData.dateOfBirth)
                 ) : (
                   <span className="text-muted-foreground">
@@ -281,8 +281,6 @@ export default function ContactDetails({
           )}
         </div>
 
-
-
         {/* Terms and Conditions Checkbox */}
         <div className="flex items-start gap-3">
           <Checkbox
@@ -302,7 +300,7 @@ export default function ContactDetails({
           >
             {t("termsAndConditions.text")}{" "}
             <Link
-              href="/policies/Terms of Service.pdf"
+              href="/policies/terms-of-service"
               target="_blank"
               rel="noopener noreferrer"
               className="text-peter hover:underline"
@@ -312,7 +310,7 @@ export default function ContactDetails({
             </Link>
             , {t("termsAndConditions.acknowledge")}{" "}
             <Link
-              href="/policies/Privacy Policy.pdf"
+              href="/policies/privacy-policy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-peter hover:underline"
@@ -331,10 +329,11 @@ export default function ContactDetails({
         <Button
           onClick={handleNextClick}
           disabled={!termsAgreed}
-          className={`w-full py-3 rounded-lg font-semibold ${termsAgreed
-            ? "bg-peter hover:bg-peter-dark text-white"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
+          className={`w-full py-3 rounded-lg font-semibold ${
+            termsAgreed
+              ? "bg-peter hover:bg-peter-dark text-white"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
         >
           {t("agreeAndContinue")}
         </Button>

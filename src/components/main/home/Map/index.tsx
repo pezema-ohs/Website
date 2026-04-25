@@ -342,7 +342,7 @@ export default function MapComponent({
       )}
       {locationDeniedOrError && mapsLoaded && (
         <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-lg z-10 border border-gray-200">
-          <p className="text-sm text-gray-700">Please enable location to see pharmacies near you.</p>
+          <p className="text-sm text-gray-700">Please enable location to see Partner Pharmacies near you</p>
         </div>
       )}
     </div>

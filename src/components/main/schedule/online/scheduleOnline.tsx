@@ -92,7 +92,7 @@ const parseDateOfBirth = (dateStr: string | undefined): Date | undefined => {
         const date = new Date(
           parseInt(year),
           parseInt(month) - 1,
-          parseInt(day)
+          parseInt(day),
         );
         if (!isNaN(date.getTime())) {
           return date;
@@ -114,7 +114,7 @@ function ScheduleOnline() {
     undefined,
     {
       skip: !isLoggedIn, // Skip query if not logged in
-    }
+    },
   );
   const {
     register,
@@ -247,11 +247,11 @@ function ScheduleOnline() {
   }, [selectedServiceType, setValue]);
 
   const handleSelectDateTime = (
-    selectedDates: Array<{ date: string; times: string[] }>
+    selectedDates: Array<{ date: string; times: string[] }>,
   ) => {
     setValue(
       "appointmentDates" as keyof FormValues,
-      selectedDates as unknown as FormValues[keyof FormValues]
+      selectedDates as unknown as FormValues[keyof FormValues],
     );
     setSelectedAppointmentDates(selectedDates);
     setIsCalendarModalOpen(false);
@@ -259,11 +259,11 @@ function ScheduleOnline() {
 
   const handleRemoveDate = (dateToRemove: string) => {
     const updatedDates = selectedAppointmentDates.filter(
-      (item) => item.date !== dateToRemove
+      (item) => item.date !== dateToRemove,
     );
     setValue(
       "appointmentDates" as keyof FormValues,
-      updatedDates as unknown as FormValues[keyof FormValues]
+      updatedDates as unknown as FormValues[keyof FormValues],
     );
     setSelectedAppointmentDates(updatedDates);
   };
@@ -273,7 +273,7 @@ function ScheduleOnline() {
       .map((item) => {
         if (item.date === date) {
           const updatedTimes = item.times.filter(
-            (time) => time !== timeToRemove
+            (time) => time !== timeToRemove,
           );
           if (updatedTimes.length === 0) {
             return null; // Remove date if no times left
@@ -283,11 +283,11 @@ function ScheduleOnline() {
         return item;
       })
       .filter(
-        (item): item is { date: string; times: string[] } => item !== null
+        (item): item is { date: string; times: string[] } => item !== null,
       );
     setValue(
       "appointmentDates" as keyof FormValues,
-      updatedDates as unknown as FormValues[keyof FormValues]
+      updatedDates as unknown as FormValues[keyof FormValues],
     );
     setSelectedAppointmentDates(updatedDates);
   };
@@ -324,11 +324,11 @@ function ScheduleOnline() {
       // Format date of birth to YYYY-MM-DD
       const formattedDateOfBirth = data.dateOfBirth
         ? `${data.dateOfBirth.getFullYear()}-${String(
-          data.dateOfBirth.getMonth() + 1
-        ).padStart(2, "0")}-${String(data.dateOfBirth.getDate()).padStart(
-          2,
-          "0"
-        )}`
+            data.dateOfBirth.getMonth() + 1,
+          ).padStart(2, "0")}-${String(data.dateOfBirth.getDate()).padStart(
+            2,
+            "0",
+          )}`
         : "";
 
       // Determine serviceType and serviceTypeChild based on conditions
@@ -383,7 +383,7 @@ function ScheduleOnline() {
               } else {
                 // If still can't parse, check if it's already in MM/DD/YYYY format
                 const mmddyyyyMatch = appointment.date.match(
-                  /(\d{1,2})\/(\d{1,2})\/(\d{4})/
+                  /(\d{1,2})\/(\d{1,2})\/(\d{4})/,
                 );
                 if (mmddyyyyMatch) {
                   // Already in MM/DD/YYYY format, return as is
@@ -401,7 +401,7 @@ function ScheduleOnline() {
             return `${month}/${day}/${year}`;
           })(),
           time: appointment.times,
-        })
+        }),
       );
 
       // Transform form data to API format
@@ -520,7 +520,7 @@ function ScheduleOnline() {
                   placeholder={t("profileInfo.firstNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.firstName && "border-red-500"
+                    errors.firstName && "border-red-500",
                   )}
                 />
                 {errors.firstName && (
@@ -545,7 +545,7 @@ function ScheduleOnline() {
                   placeholder={t("profileInfo.lastNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.lastName && "border-red-500"
+                    errors.lastName && "border-red-500",
                   )}
                 />
                 {errors.lastName && (
@@ -572,8 +572,8 @@ function ScheduleOnline() {
                       !value
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t("profileInfo.phoneNumberInvalid") ||
-                        "Please enter a valid phone number",
+                          t("profileInfo.phoneNumberInvalid") ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
@@ -589,7 +589,7 @@ function ScheduleOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.phoneNumber && "!border-red-500"
+                        errors.phoneNumber && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -633,7 +633,7 @@ function ScheduleOnline() {
                           className={cn(
                             "w-full mt-1 justify-between font-normal",
                             !field.value && "text-muted-foreground",
-                            errors.dateOfBirth && "border-red-500"
+                            errors.dateOfBirth && "border-red-500",
                           )}
                         >
                           {field.value ? (
@@ -641,9 +641,9 @@ function ScheduleOnline() {
                             `${(field.value.getMonth() + 1)
                               .toString()
                               .padStart(2, "0")}/${field.value
-                                .getDate()
-                                .toString()
-                                .padStart(2, "0")}/${field.value.getFullYear()}`
+                              .getDate()
+                              .toString()
+                              .padStart(2, "0")}/${field.value.getFullYear()}`
                           ) : (
                             <span>
                               {t("profileInfo.dateOfBirthPlaceholder")}
@@ -707,7 +707,7 @@ function ScheduleOnline() {
                   placeholder={t("pharmacyInformation.pharmacyNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.pharmacyName && "border-red-500"
+                    errors.pharmacyName && "border-red-500",
                   )}
                 />
                 {errors.pharmacyName && (
@@ -731,8 +731,8 @@ function ScheduleOnline() {
                       !value || value.trim() === ""
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t("pharmacyInformation.pharmacyPhoneInvalid") ||
-                        "Please enter a valid phone number",
+                          t("pharmacyInformation.pharmacyPhoneInvalid") ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
@@ -740,7 +740,7 @@ function ScheduleOnline() {
                       defaultCountry="US"
                       international
                       placeholder={t(
-                        "pharmacyInformation.pharmacyPhonePlaceholder"
+                        "pharmacyInformation.pharmacyPhonePlaceholder",
                       )}
                       value={field.value || undefined}
                       onChange={(val) => field.onChange(val ?? "")}
@@ -750,7 +750,7 @@ function ScheduleOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.pharmacyPhone && "!border-red-500"
+                        errors.pharmacyPhone && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -783,11 +783,11 @@ function ScheduleOnline() {
                   required: t("pharmacyInformation.pharmacyAddressRequired"),
                 })}
                 placeholder={t(
-                  "pharmacyInformation.pharmacyAddressPlaceholder"
+                  "pharmacyInformation.pharmacyAddressPlaceholder",
                 )}
                 className={cn(
                   "w-full mt-1",
-                  errors.pharmacyAddress && "border-red-500"
+                  errors.pharmacyAddress && "border-red-500",
                 )}
               />
               {errors.pharmacyAddress && (
@@ -870,7 +870,7 @@ function ScheduleOnline() {
                     <SelectTrigger
                       className={cn(
                         "w-full mt-1 h-10 text-[14px]",
-                        errors.serviceCategory && "border-red-500"
+                        errors.serviceCategory && "border-red-500",
                       )}
                     >
                       <SelectValue
@@ -926,18 +926,18 @@ function ScheduleOnline() {
                       <SelectTrigger
                         className={cn(
                           "w-full mt-1 h-10 text-[14px]",
-                          errors.serviceType && "border-red-500"
+                          errors.serviceType && "border-red-500",
                         )}
                       >
                         <SelectValue
                           placeholder={
                             selectedCategory === "vaccinations"
                               ? t(
-                                "services.serviceType.vaccinations.placeholder"
-                              )
+                                  "services.serviceType.vaccinations.placeholder",
+                                )
                               : t(
-                                "services.serviceType.health_screenings.placeholder"
-                              )
+                                  "services.serviceType.health_screenings.placeholder",
+                                )
                           }
                         />
                       </SelectTrigger>
@@ -961,22 +961,22 @@ function ScheduleOnline() {
                           <>
                             <SelectItem value="blood_pressure">
                               {t(
-                                "services.serviceType.health_screenings.blood_pressure"
+                                "services.serviceType.health_screenings.blood_pressure",
                               )}
                             </SelectItem>
                             <SelectItem value="cholesteric">
                               {t(
-                                "services.serviceType.health_screenings.cholesteric"
+                                "services.serviceType.health_screenings.cholesteric",
                               )}
                             </SelectItem>
                             <SelectItem value="diabetes">
                               {t(
-                                "services.serviceType.health_screenings.diabetes"
+                                "services.serviceType.health_screenings.diabetes",
                               )}
                             </SelectItem>
                             <SelectItem value="health_screenings_others">
                               {t(
-                                "services.serviceType.health_screenings.others"
+                                "services.serviceType.health_screenings.others",
                               )}
                             </SelectItem>
                           </>
@@ -1008,15 +1008,15 @@ function ScheduleOnline() {
                     id="otherVaccination"
                     {...register("otherVaccination", {
                       required: t(
-                        "services.serviceType.otherVaccination.required"
+                        "services.serviceType.otherVaccination.required",
                       ),
                     })}
                     placeholder={t(
-                      "services.serviceType.otherVaccination.placeholder"
+                      "services.serviceType.otherVaccination.placeholder",
                     )}
                     className={cn(
                       "w-full mt-1",
-                      errors.otherVaccination && "border-red-500"
+                      errors.otherVaccination && "border-red-500",
                     )}
                   />
                   {errors.otherVaccination && (
@@ -1042,15 +1042,15 @@ function ScheduleOnline() {
                     id="otherHealthScreening"
                     {...register("otherHealthScreening", {
                       required: t(
-                        "services.serviceType.otherHealthScreening.required"
+                        "services.serviceType.otherHealthScreening.required",
                       ),
                     })}
                     placeholder={t(
-                      "services.serviceType.otherHealthScreening.placeholder"
+                      "services.serviceType.otherHealthScreening.placeholder",
                     )}
                     className={cn(
                       "w-full mt-1",
-                      errors.otherHealthScreening && "border-red-500"
+                      errors.otherHealthScreening && "border-red-500",
                     )}
                   />
                   {errors.otherHealthScreening && (
@@ -1077,11 +1077,11 @@ function ScheduleOnline() {
                     required: t("services.serviceType.otherService.required"),
                   })}
                   placeholder={t(
-                    "services.serviceType.otherService.placeholder"
+                    "services.serviceType.otherService.placeholder",
                   )}
                   className={cn(
                     "w-full mt-1",
-                    errors.otherService && "border-red-500"
+                    errors.otherService && "border-red-500",
                   )}
                 />
                 {errors.otherService && (
@@ -1108,11 +1108,11 @@ function ScheduleOnline() {
                   "w-full mt-1 justify-between font-normal text-left",
                   (!selectedAppointmentDates ||
                     selectedAppointmentDates.length === 0) &&
-                  "text-muted-foreground"
+                    "text-muted-foreground",
                 )}
               >
                 {selectedAppointmentDates &&
-                  selectedAppointmentDates.length > 0 ? (
+                selectedAppointmentDates.length > 0 ? (
                   <span className="text-sm font-medium text-gray-700">
                     {selectedAppointmentDates.length}{" "}
                     {selectedAppointmentDates.length === 1
@@ -1133,7 +1133,7 @@ function ScheduleOnline() {
                     {selectedAppointmentDates.map(
                       (
                         appointment: { date: string; times: string[] },
-                        index: number
+                        index: number,
                       ) => (
                         <div
                           key={index}
@@ -1157,7 +1157,7 @@ function ScheduleOnline() {
                                         onClick={() =>
                                           handleRemoveTime(
                                             appointment.date,
-                                            time
+                                            time,
                                           )
                                         }
                                         className="ml-1 hover:text-red-600 transition-colors"
@@ -1166,7 +1166,7 @@ function ScheduleOnline() {
                                         ×
                                       </button>
                                     </div>
-                                  )
+                                  ),
                                 )}
                               </div>
                             </div>
@@ -1180,17 +1180,17 @@ function ScheduleOnline() {
                             </button>
                           </div>
                         </div>
-                      )
+                      ),
                     )}
                   </div>
                 )}
 
               {(!selectedAppointmentDates ||
                 selectedAppointmentDates.length === 0) && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {t("appointment.required")}
-                  </p>
-                )}
+                <p className="text-red-500 text-xs mt-1">
+                  {t("appointment.required")}
+                </p>
+              )}
             </div>
 
             <Label
@@ -1232,7 +1232,7 @@ function ScheduleOnline() {
                 <p className="text-xs text-gray-700">
                   {t("consent.agreementText")}{" "}
                   <Link
-                    href="/policies/Terms of Service.pdf"
+                    href="/policies/terms-of-service"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-peter hover:underline"
@@ -1244,7 +1244,7 @@ function ScheduleOnline() {
                   </Link>
                   {t("consent.and")}
                   <Link
-                    href="/policies/Privacy Policy.pdf"
+                    href="/policies/privacy-policy"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-peter hover:underline"
@@ -1271,7 +1271,16 @@ function ScheduleOnline() {
             disabled={isLoading}
             className="w-full bg-peter hover:bg-peter-dark text-white py-3 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? <><p className="flex items-center justify-center gap-2">{t("submitting")}<Loader className="animate-spin size-4 text-white" /></p></> : t("submitButton")}
+            {isLoading ? (
+              <>
+                <p className="flex items-center justify-center gap-2">
+                  {t("submitting")}
+                  <Loader className="animate-spin size-4 text-white" />
+                </p>
+              </>
+            ) : (
+              t("submitButton")
+            )}
           </Button>
         </form>
       </div>

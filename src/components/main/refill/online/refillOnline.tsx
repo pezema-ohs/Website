@@ -85,7 +85,7 @@ const parseDateOfBirth = (dateStr: string | undefined): Date | undefined => {
         const date = new Date(
           parseInt(year),
           parseInt(month) - 1,
-          parseInt(day)
+          parseInt(day),
         );
         if (!isNaN(date.getTime())) {
           return date;
@@ -107,7 +107,7 @@ function RefillOnline() {
     undefined,
     {
       skip: !isLoggedIn, // Skip query if not logged in
-    }
+    },
   );
 
   const {
@@ -213,7 +213,7 @@ function RefillOnline() {
     try {
       // Filter and validate medications
       const validMedications = data.medications.filter(
-        (med) => med.name.trim() !== "" || med.rxNumber.trim() !== ""
+        (med) => med.name.trim() !== "" || med.rxNumber.trim() !== "",
       );
 
       // Ensure at least one medication is provided
@@ -236,11 +236,11 @@ function RefillOnline() {
       // Format date of birth to YYYY-MM-DD
       const formattedDateOfBirth = data.dateOfBirth
         ? `${data.dateOfBirth.getFullYear()}-${String(
-          data.dateOfBirth.getMonth() + 1
-        ).padStart(2, "0")}-${String(data.dateOfBirth.getDate()).padStart(
-          2,
-          "0"
-        )}`
+            data.dateOfBirth.getMonth() + 1,
+          ).padStart(2, "0")}-${String(data.dateOfBirth.getDate()).padStart(
+            2,
+            "0",
+          )}`
         : "";
 
       // Transform form data to API format
@@ -362,7 +362,7 @@ function RefillOnline() {
                   placeholder={t("personalInformation.firstNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.firstName && "border-red-500"
+                    errors.firstName && "border-red-500",
                   )}
                 />
                 {errors.firstName && (
@@ -387,7 +387,7 @@ function RefillOnline() {
                   placeholder={t("personalInformation.lastNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.lastName && "border-red-500"
+                    errors.lastName && "border-red-500",
                   )}
                 />
                 {errors.lastName && (
@@ -414,15 +414,17 @@ function RefillOnline() {
                       !value
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t("personalInformation.phoneNumberInvalid") ||
-                        "Please enter a valid phone number",
+                          t("personalInformation.phoneNumberInvalid") ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
                       id="phoneNumber"
                       defaultCountry="US"
                       international
-                      placeholder={t("personalInformation.phoneNumberPlaceholder")}
+                      placeholder={t(
+                        "personalInformation.phoneNumberPlaceholder",
+                      )}
                       value={field.value || undefined}
                       onChange={(val) => field.onChange(val ?? "")}
                       onBlur={field.onBlur}
@@ -431,7 +433,7 @@ function RefillOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.phoneNumber && "!border-red-500"
+                        errors.phoneNumber && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -475,7 +477,7 @@ function RefillOnline() {
                           className={cn(
                             "w-full mt-1 justify-between font-normal",
                             !field.value && "text-muted-foreground",
-                            errors.dateOfBirth && "border-red-500"
+                            errors.dateOfBirth && "border-red-500",
                           )}
                         >
                           {field.value ? (
@@ -483,9 +485,9 @@ function RefillOnline() {
                             `${(field.value.getMonth() + 1)
                               .toString()
                               .padStart(2, "0")}/${field.value
-                                .getDate()
-                                .toString()
-                                .padStart(2, "0")}/${field.value.getFullYear()}`
+                              .getDate()
+                              .toString()
+                              .padStart(2, "0")}/${field.value.getFullYear()}`
                           ) : (
                             <span>
                               {t("personalInformation.dateOfBirthPlaceholder")}
@@ -549,7 +551,7 @@ function RefillOnline() {
                   placeholder={t("pharmacyInformation.pharmacyNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.pharmacyName && "border-red-500"
+                    errors.pharmacyName && "border-red-500",
                   )}
                 />
                 {errors.pharmacyName && (
@@ -573,8 +575,8 @@ function RefillOnline() {
                       !value || value.trim() === ""
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t("pharmacyInformation.pharmacyPhoneInvalid") ||
-                        "Please enter a valid phone number",
+                          t("pharmacyInformation.pharmacyPhoneInvalid") ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
@@ -582,7 +584,7 @@ function RefillOnline() {
                       defaultCountry="US"
                       international
                       placeholder={t(
-                        "pharmacyInformation.pharmacyPhonePlaceholder"
+                        "pharmacyInformation.pharmacyPhonePlaceholder",
                       )}
                       value={field.value || undefined}
                       onChange={(val) => field.onChange(val ?? "")}
@@ -592,7 +594,7 @@ function RefillOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.pharmacyPhone && "!border-red-500"
+                        errors.pharmacyPhone && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -623,7 +625,7 @@ function RefillOnline() {
                 id="pharmacyAddress"
                 {...register("pharmacyAddress")}
                 placeholder={t(
-                  "pharmacyInformation.pharmacyAddressPlaceholder"
+                  "pharmacyInformation.pharmacyAddressPlaceholder",
                 )}
                 className="w-full mt-1"
               />
@@ -704,7 +706,7 @@ function RefillOnline() {
                   placeholder={t("deliveryDetails.deliveryAddressPlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.deliveryAddress && "border-red-500"
+                    errors.deliveryAddress && "border-red-500",
                   )}
                 />
                 {errors.deliveryAddress && (
@@ -913,7 +915,7 @@ function RefillOnline() {
                 <p className="text-xs text-gray-700 text-justify">
                   {t("consent.agreementText")}{" "}
                   <Link
-                    href="/policies/Terms of Service.pdf"
+                    href="/policies/terms-of-service"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-peter hover:underline"
@@ -925,7 +927,7 @@ function RefillOnline() {
                   </Link>
                   {t("consent.and")}
                   <Link
-                    href="/policies/Privacy Policy.pdf"
+                    href="/policies/privacy-policy"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-peter hover:underline"
@@ -938,7 +940,6 @@ function RefillOnline() {
                   .
                 </p>
               </label>
-
             </div>
             {errors.consent && (
               <p className="text-red-500 text-xs mt-1 ml-6">
@@ -953,7 +954,16 @@ function RefillOnline() {
             disabled={isLoading}
             className="w-full bg-peter hover:bg-peter-dark text-white py-3 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? <><p className="flex items-center justify-center gap-2">{t("submitting")}<Loader className="animate-spin size-4 text-white" /></p></> : t("submitButton")}
+            {isLoading ? (
+              <>
+                <p className="flex items-center justify-center gap-2">
+                  {t("submitting")}
+                  <Loader className="animate-spin size-4 text-white" />
+                </p>
+              </>
+            ) : (
+              t("submitButton")
+            )}
           </Button>
         </form>
       </div>

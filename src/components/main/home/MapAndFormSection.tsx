@@ -59,7 +59,7 @@ export default function MapAndFormSection() {
   const currentUser = useAppSelector(selectUser);
   const { data: coverageZipcodeData } = useGetCoverageZipcodeQuery(
     { limit: 10000 },
-    { refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: true },
   );
 
   const coverageZipcode = useMemo(() => {
@@ -73,10 +73,10 @@ export default function MapAndFormSection() {
   const pickupName = useAppSelector((state) => state.map.pickupName);
   const dropoffName = useAppSelector((state) => state.map.dropoffName);
   const pickupLocationCoords = useAppSelector(
-    (state) => state.map.pickupLocation
+    (state) => state.map.pickupLocation,
   );
   const dropoffLocationCoords = useAppSelector(
-    (state) => state.map.dropoffLocation
+    (state) => state.map.dropoffLocation,
   );
   const zipCode = useAppSelector((state) => state.map.zipCode);
   const city = useAppSelector((state) => state.map.city);
@@ -85,7 +85,7 @@ export default function MapAndFormSection() {
   const distance = useAppSelector((state) => state.map.distance);
   const duration = useAppSelector((state) => state.map.duration);
   const selectedPharmacy = useAppSelector(
-    (state) => state.map.selectedPharmacy
+    (state) => state.map.selectedPharmacy,
   );
 
   // Fetch pharmacies from API based on zip/city/state
@@ -99,7 +99,7 @@ export default function MapAndFormSection() {
       // Skip when we don't have enough data to query
       // Run when we have a zipCode OR both city and state
       skip: !(zipCode || (city && state)),
-    }
+    },
   );
 
   const [triggerGetPharmacies] = useLazyGetPharmaciesQuery();
@@ -127,17 +127,17 @@ export default function MapAndFormSection() {
   const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
   const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
+    new Date(),
   );
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mapSelectionMode, setMapSelectionMode] = useState<
     "pickup" | "dropoff" | null
   >(null);
   const [displayedPharmacies, setDisplayedPharmacies] = useState<Pharmacy[]>(
-    []
+    [],
   );
   // Out-of-coverage modal: show when user selects pickup/dropoff outside coverage
   const [outOfCoverageModal, setOutOfCoverageModal] = useState<{
@@ -184,9 +184,12 @@ export default function MapAndFormSection() {
       return;
     }
 
-    const interval = setInterval(() => {
-      selectRandomPharmacies(pharmaciesFromApi);
-    }, 5 * 60 * 1000); // 5 minutes in milliseconds
+    const interval = setInterval(
+      () => {
+        selectRandomPharmacies(pharmaciesFromApi);
+      },
+      5 * 60 * 1000,
+    ); // 5 minutes in milliseconds
 
     return () => clearInterval(interval);
   }, [pharmaciesFromApi, selectRandomPharmacies]);
@@ -205,7 +208,7 @@ export default function MapAndFormSection() {
       }
 
       const cityStateMatch = currentLocation.match(
-        /([^,]+),\s*([A-Z]{2})\s+\d{5}/
+        /([^,]+),\s*([A-Z]{2})\s+\d{5}/,
       );
       if (cityStateMatch) {
         dispatch(setCity(cityStateMatch[1].trim()));
@@ -221,7 +224,7 @@ export default function MapAndFormSection() {
 
             // Extract zipcode
             const postalCode = addressComponents.find((component) =>
-              component.types.includes("postal_code")
+              component.types.includes("postal_code"),
             );
             if (postalCode) {
               dispatch(setZipCode(postalCode.long_name));
@@ -232,7 +235,7 @@ export default function MapAndFormSection() {
               (component) =>
                 component.types.includes("locality") ||
                 component.types.includes("sublocality") ||
-                component.types.includes("sublocality_level_1")
+                component.types.includes("sublocality_level_1"),
             );
             if (cityComponent) {
               dispatch(setCity(cityComponent.long_name));
@@ -240,7 +243,7 @@ export default function MapAndFormSection() {
 
             // Extract state
             const stateComponent = addressComponents.find((component) =>
-              component.types.includes("administrative_area_level_1")
+              component.types.includes("administrative_area_level_1"),
             );
             if (stateComponent) {
               dispatch(setState(stateComponent.short_name));
@@ -303,7 +306,7 @@ export default function MapAndFormSection() {
         state,
         selectedPharmacyId: selectedPharmacy?.id || null,
         isPartnerPharmacy: selectedPharmacy?.isPartner || false,
-      })
+      }),
     );
 
     // Proceed to checkout
@@ -402,8 +405,6 @@ export default function MapAndFormSection() {
     return address;
   };
 
-
-
   return (
     <GoogleMapsProvider>
       <div className="flex flex-col lg:flex-row bg-gray-50 pt-4 sm:pt-8 lg:px-4 px-0 pb-4 sm:pb-8 gap-x-16 gap-y-4 sm:gap-y-8 ">
@@ -481,13 +482,14 @@ export default function MapAndFormSection() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setMapSelectionMode(
-                          mapSelectionMode === "pickup" ? null : "pickup"
+                          mapSelectionMode === "pickup" ? null : "pickup",
                         );
                       }}
-                      className={`p-1.5 rounded transition-colors ${mapSelectionMode === "pickup"
-                        ? "bg-peter text-white"
-                        : "text-gray-400 hover:text-peter hover:bg-gray-100"
-                        }`}
+                      className={`p-1.5 rounded transition-colors ${
+                        mapSelectionMode === "pickup"
+                          ? "bg-peter text-white"
+                          : "text-gray-400 hover:text-peter hover:bg-gray-100"
+                      }`}
                       title="Click on map to select pickup location"
                     >
                       <Map className="w-4 h-4" />
@@ -529,13 +531,14 @@ export default function MapAndFormSection() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setMapSelectionMode(
-                          mapSelectionMode === "dropoff" ? null : "dropoff"
+                          mapSelectionMode === "dropoff" ? null : "dropoff",
                         );
                       }}
-                      className={`p-1.5 rounded transition-colors ${mapSelectionMode === "dropoff"
-                        ? "bg-peter text-white"
-                        : "text-gray-400 hover:text-peter hover:bg-gray-100"
-                        }`}
+                      className={`p-1.5 rounded transition-colors ${
+                        mapSelectionMode === "dropoff"
+                          ? "bg-peter text-white"
+                          : "text-gray-400 hover:text-peter hover:bg-gray-100"
+                      }`}
                       title="Click on map to select dropoff location"
                     >
                       <Map className="w-4 h-4" />
@@ -551,19 +554,20 @@ export default function MapAndFormSection() {
                 <Label className="text-md text-gray-600">{tForm("date")}</Label>
                 <button
                   onClick={() => setIsDatePickerOpen(true)}
-                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-[#be95be] w-full ${deliveryTime === "today"
-                    ? "border-peter bg-peter/10"
-                    : "border-gray-200 bg-white hover:border-gray-300"
-                    }`}
+                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-[#be95be] w-full ${
+                    deliveryTime === "today"
+                      ? "border-peter bg-peter/10"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
                 >
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5 text-gray-600" />
                     <span className="font-medium text-gray-900">
                       {selectedDate
                         ? selectedDate.toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })
+                            month: "short",
+                            day: "numeric",
+                          })
                         : tForm("today")}
                     </span>
                   </div>
@@ -573,10 +577,11 @@ export default function MapAndFormSection() {
                 <Label className="text-md text-gray-600">{tForm("time")}</Label>
                 <button
                   onClick={() => setIsTimePickerOpen(true)}
-                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-[#be95be] w-full ${deliverySpeed === "now"
-                    ? "border-peter bg-peter/10"
-                    : "border-gray-200 bg-white hover:border-gray-300"
-                    }`}
+                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-[#be95be] w-full ${
+                    deliverySpeed === "now"
+                      ? "border-peter bg-peter/10"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
                 >
                   <div className="flex items-center  justify-between">
                     <div className="flex items-center gap-2">
@@ -648,8 +653,9 @@ export default function MapAndFormSection() {
           </div>
         </div>
 
-
-        <p className="text-sm text-gray-500 px-4 md:px-0 md:hidden">{t("pleaseZoomToSelectPharmacy")}</p>
+        <p className="text-sm text-gray-500 px-4 md:px-0 md:hidden">
+          {t("pleaseZoomToSelectPharmacy")}
+        </p>
         {/* Right Section - Map - Visible on all devices */}
         <div className="flex w-full lg:w-1/2 px-4 md:px-0 relative rounded-xl h-[400px] sm:h-[450px] md:h-[500px] lg:h-auto lg:min-h-[600px]">
           <MapComponent
@@ -670,7 +676,9 @@ export default function MapAndFormSection() {
             selectionMode={mapSelectionMode}
             onDistanceCalculated={handleDistanceCalculated}
             markersResetKey={markersResetKey}
-            onUserLocationDetected={(address) => dispatch(setCurrentLocation(address))}
+            onUserLocationDetected={(address) =>
+              dispatch(setCurrentLocation(address))
+            }
           />
           {mapSelectionMode && (
             <div className="absolute top-4 left-4 bg-white px-4 py-2 rounded-lg shadow-lg z-10 border-2 border-peter">
@@ -700,7 +708,7 @@ export default function MapAndFormSection() {
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-peter" />
                   <span className="text-sm font-semibold text-gray-900">
-                    Duration: {duration}
+                    Estimated Time: {duration}
                   </span>
                 </div>
               </div>
@@ -713,15 +721,17 @@ export default function MapAndFormSection() {
               Loading pharmacies...
             </div>
           )}
-          {!pharmaciesLoading && displayedPharmacies.length === 0 && (
+          {/* {!pharmaciesLoading && displayedPharmacies.length === 0 && (
             <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-md z-10 border border-gray-200 text-sm text-gray-700">
               {t("noPharmaciesFound")}
             </div>
-          )}
+          )} */}
 
           {pharmaciesIsError && (
             <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-md z-10 border border-red-200 text-sm text-red-700">
-              {pharmaciesIsError ? t("errorLoadingPharmacies") : t("errorLoadingPharmacies")}
+              {pharmaciesIsError
+                ? t("errorLoadingPharmacies")
+                : t("errorLoadingPharmacies")}
             </div>
           )}
         </div>
@@ -776,8 +786,7 @@ export default function MapAndFormSection() {
                 data?: { message?: string; err?: { message?: string } };
               };
               const is404 = err.status === 404;
-              const msg =
-                err.data?.err?.message ?? err.data?.message ?? "";
+              const msg = err.data?.err?.message ?? err.data?.message ?? "";
               if (
                 is404 ||
                 msg.toLowerCase().includes("postcode") ||

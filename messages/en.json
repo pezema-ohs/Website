@@ -814,7 +814,7 @@
     "pharmacyInformation": {
       "title": "Pharmacy Information",
       "pharmacyName": "Pharmacy Name",
-      "pharmacyNamePlaceholder": "e.g. CVS, Walgreens, etc.",
+      "pharmacyNamePlaceholder": "Enter pharmacy name here…",
       "pharmacyNameRequired": "Pharmacy name is required",
       "pharmacyPhone": "Pharmacy Phone",
       "pharmacyPhonePlaceholder": "(XXX) XXX-XXXX",
@@ -869,7 +869,7 @@
     "submitButton": "Submit Refill Request"
   },
   "footer": {
-    "slogan": "Connecting communities to their local pharmacies for fast, reliable access to prescriptions",
+    "slogan": "A pharmacy service connecting communities to their local pharmacies for fast, reliable access to prescriptions",
     "links": {
       "home": "Home",
       "aboutUs": "About Us",
@@ -914,7 +914,7 @@
       "previousPharmacy": {
         "title": "Previous Pharmacy",
         "pharmacyName": "Previous Pharmacy Name",
-        "pharmacyNamePlaceholder": "e.g. CVS, Walgreens, etc.",
+        "pharmacyNamePlaceholder": "Enter pharmacy name here…",
         "pharmacyNameRequired": "Previous pharmacy name is required",
         "pharmacyPhone": "Previous Pharmacy Phone",
         "pharmacyPhonePlaceholder": "(XXX) XXX-XXXX",
@@ -931,7 +931,7 @@
       "newPharmacy": {
         "title": "New Pharmacy",
         "pharmacyName": "New Pharmacy Name",
-        "pharmacyNamePlaceholder": "e.g. CVS, Walgreens, etc.",
+        "pharmacyNamePlaceholder": "Enter pharmacy name here…",
         "pharmacyNameRequired": "New pharmacy name is required",
         "pharmacyPhone": "New Pharmacy Phone",
         "pharmacyPhonePlaceholder": "(XXX) XXX-XXXX",
@@ -994,7 +994,7 @@
     "pharmacyInformation": {
       "title": "Pharmacy Information",
       "pharmacyName": "Pharmacy Name",
-      "pharmacyNamePlaceholder": "e.g. CVS, Walgreens, etc.",
+      "pharmacyNamePlaceholder": "Enter pharmacy name here…",
       "pharmacyNameRequired": "Pharmacy name is required",
       "pharmacyPhone": "Pharmacy Phone",
       "pharmacyPhonePlaceholder": "(XXX) XXX-XXXX",
@@ -1156,9 +1156,9 @@
     "title": "Pricing Breakdown",
     "deliveryFee": {
       "title": "Delivery fee",
-      "first2Miles": "You pay $5.99 for first 2 miles",
-      "perAdditionalMile": "$1.89 per additional mile",
-      "rushHourFee": "+$1.65 during rush-hour delivery",
+      "first2Miles": "You pay $6.49 for first 2 miles",
+      "perAdditionalMile": "$1.99 per additional mile",
+      "rushHourFee": "+$1.85 during rush-hour delivery",
       "rushHourTime": "Rush hour: Weekdays 11AM-1PM & 4PM-6PM"
     },
     "serviceFee": {

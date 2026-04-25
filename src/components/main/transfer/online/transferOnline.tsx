@@ -93,7 +93,7 @@ const parseDateOfBirth = (dateStr: string | undefined): Date | undefined => {
         const date = new Date(
           parseInt(year),
           parseInt(month) - 1,
-          parseInt(day)
+          parseInt(day),
         );
         if (!isNaN(date.getTime())) {
           return date;
@@ -115,7 +115,7 @@ function TransferOnline() {
     undefined,
     {
       skip: !isLoggedIn, // Skip query if not logged in
-    }
+    },
   );
   const {
     register,
@@ -233,7 +233,7 @@ function TransferOnline() {
 
       // Filter and validate medications
       const validMedications = data.medications.filter(
-        (med) => med.name.trim() !== "" || med.rxNumber.trim() !== ""
+        (med) => med.name.trim() !== "" || med.rxNumber.trim() !== "",
       );
 
       // Ensure at least one medication is provided
@@ -257,11 +257,11 @@ function TransferOnline() {
       // Format date of birth to YYYY-MM-DD
       const formattedDateOfBirth = data.dateOfBirth
         ? `${data.dateOfBirth.getFullYear()}-${String(
-          data.dateOfBirth.getMonth() + 1
-        ).padStart(2, "0")}-${String(data.dateOfBirth.getDate()).padStart(
-          2,
-          "0"
-        )}`
+            data.dateOfBirth.getMonth() + 1,
+          ).padStart(2, "0")}-${String(data.dateOfBirth.getDate()).padStart(
+            2,
+            "0",
+          )}`
         : "";
 
       // Transform form data to API format
@@ -387,7 +387,7 @@ function TransferOnline() {
                   placeholder={t("personalInformation.firstNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.firstName && "border-red-500"
+                    errors.firstName && "border-red-500",
                   )}
                 />
                 {errors.firstName && (
@@ -412,7 +412,7 @@ function TransferOnline() {
                   placeholder={t("personalInformation.lastNamePlaceholder")}
                   className={cn(
                     "w-full mt-1",
-                    errors.lastName && "border-red-500"
+                    errors.lastName && "border-red-500",
                   )}
                 />
                 {errors.lastName && (
@@ -439,15 +439,17 @@ function TransferOnline() {
                       !value
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t("personalInformation.phoneNumberInvalid") ||
-                        "Please enter a valid phone number",
+                          t("personalInformation.phoneNumberInvalid") ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
                       id="phoneNumber"
                       defaultCountry="US"
                       international
-                      placeholder={t("personalInformation.phoneNumberPlaceholder")}
+                      placeholder={t(
+                        "personalInformation.phoneNumberPlaceholder",
+                      )}
                       value={field.value || undefined}
                       onChange={(val) => field.onChange(val ?? "")}
                       onBlur={field.onBlur}
@@ -456,7 +458,7 @@ function TransferOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.phoneNumber && "!border-red-500"
+                        errors.phoneNumber && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -500,7 +502,7 @@ function TransferOnline() {
                           className={cn(
                             "w-full mt-1 justify-between font-normal",
                             !field.value && "text-muted-foreground",
-                            errors.dateOfBirth && "border-red-500"
+                            errors.dateOfBirth && "border-red-500",
                           )}
                         >
                           {field.value ? (
@@ -508,9 +510,9 @@ function TransferOnline() {
                             `${(field.value.getMonth() + 1)
                               .toString()
                               .padStart(2, "0")}/${field.value
-                                .getDate()
-                                .toString()
-                                .padStart(2, "0")}/${field.value.getFullYear()}`
+                              .getDate()
+                              .toString()
+                              .padStart(2, "0")}/${field.value.getFullYear()}`
                           ) : (
                             <span>
                               {t("personalInformation.dateOfBirthPlaceholder")}
@@ -574,15 +576,15 @@ function TransferOnline() {
                   id="previousPharmacyName"
                   {...register("previousPharmacyName", {
                     required: t(
-                      "pharmacyInformation.previousPharmacy.pharmacyNameRequired"
+                      "pharmacyInformation.previousPharmacy.pharmacyNameRequired",
                     ),
                   })}
                   placeholder={t(
-                    "pharmacyInformation.previousPharmacy.pharmacyNamePlaceholder"
+                    "pharmacyInformation.previousPharmacy.pharmacyNamePlaceholder",
                   )}
                   className={cn(
                     "w-full mt-1",
-                    errors.previousPharmacyName && "border-red-500"
+                    errors.previousPharmacyName && "border-red-500",
                   )}
                 />
                 {errors.previousPharmacyName && (
@@ -606,10 +608,10 @@ function TransferOnline() {
                       !value || value.trim() === ""
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t(
-                          "pharmacyInformation.previousPharmacy.pharmacyPhoneInvalid"
-                        ) ||
-                        "Please enter a valid phone number",
+                          t(
+                            "pharmacyInformation.previousPharmacy.pharmacyPhoneInvalid",
+                          ) ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
@@ -617,7 +619,7 @@ function TransferOnline() {
                       defaultCountry="US"
                       international
                       placeholder={t(
-                        "pharmacyInformation.previousPharmacy.pharmacyPhonePlaceholder"
+                        "pharmacyInformation.previousPharmacy.pharmacyPhonePlaceholder",
                       )}
                       value={field.value || undefined}
                       onChange={(val) => field.onChange(val ?? "")}
@@ -627,7 +629,7 @@ function TransferOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.previousPharmacyPhone && "!border-red-500"
+                        errors.previousPharmacyPhone && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -658,7 +660,7 @@ function TransferOnline() {
                 id="previousPharmacyAddress"
                 {...register("previousPharmacyAddress")}
                 placeholder={t(
-                  "pharmacyInformation.previousPharmacy.pharmacyAddressPlaceholder"
+                  "pharmacyInformation.previousPharmacy.pharmacyAddressPlaceholder",
                 )}
                 className="w-full mt-1"
               />
@@ -678,7 +680,7 @@ function TransferOnline() {
                     required: false,
                   })}
                   placeholder={t(
-                    "pharmacyInformation.previousPharmacy.cityPlaceholder"
+                    "pharmacyInformation.previousPharmacy.cityPlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -697,7 +699,7 @@ function TransferOnline() {
                     required: false,
                   })}
                   placeholder={t(
-                    "pharmacyInformation.previousPharmacy.statePlaceholder"
+                    "pharmacyInformation.previousPharmacy.statePlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -716,7 +718,7 @@ function TransferOnline() {
                     required: false,
                   })}
                   placeholder={t(
-                    "pharmacyInformation.previousPharmacy.zipCodePlaceholder"
+                    "pharmacyInformation.previousPharmacy.zipCodePlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -740,7 +742,7 @@ function TransferOnline() {
                   id="newPharmacyName"
                   {...register("newPharmacyName")}
                   placeholder={t(
-                    "pharmacyInformation.newPharmacy.pharmacyNamePlaceholder"
+                    "pharmacyInformation.newPharmacy.pharmacyNamePlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -760,10 +762,10 @@ function TransferOnline() {
                       !value || value.trim() === ""
                         ? true
                         : isValidPhoneNumber(value) ||
-                        t(
-                          "pharmacyInformation.newPharmacy.pharmacyPhoneInvalid"
-                        ) ||
-                        "Please enter a valid phone number",
+                          t(
+                            "pharmacyInformation.newPharmacy.pharmacyPhoneInvalid",
+                          ) ||
+                          "Please enter a valid phone number",
                   }}
                   render={({ field }) => (
                     <PhoneInput
@@ -771,7 +773,7 @@ function TransferOnline() {
                       defaultCountry="US"
                       international
                       placeholder={t(
-                        "pharmacyInformation.newPharmacy.pharmacyPhonePlaceholder"
+                        "pharmacyInformation.newPharmacy.pharmacyPhonePlaceholder",
                       )}
                       value={field.value || undefined}
                       onChange={(val) => field.onChange(val ?? "")}
@@ -781,7 +783,7 @@ function TransferOnline() {
                         "bg-transparent [&_.PhoneInputCountry]:bg-transparent [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:focus-visible:ring-0 [&_.PhoneInputInput]:outline-none",
                         "border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
                         "text-sm",
-                        errors.newPharmacyPhone && "!border-red-500"
+                        errors.newPharmacyPhone && "!border-red-500",
                       )}
                       // numberInputProps={{
                       //   className: cn(
@@ -812,7 +814,7 @@ function TransferOnline() {
                 id="newPharmacyAddress"
                 {...register("newPharmacyAddress")}
                 placeholder={t(
-                  "pharmacyInformation.newPharmacy.pharmacyAddressPlaceholder"
+                  "pharmacyInformation.newPharmacy.pharmacyAddressPlaceholder",
                 )}
                 className="w-full mt-1"
               />
@@ -832,7 +834,7 @@ function TransferOnline() {
                     required: false,
                   })}
                   placeholder={t(
-                    "pharmacyInformation.newPharmacy.cityPlaceholder"
+                    "pharmacyInformation.newPharmacy.cityPlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -851,7 +853,7 @@ function TransferOnline() {
                     required: false,
                   })}
                   placeholder={t(
-                    "pharmacyInformation.newPharmacy.statePlaceholder"
+                    "pharmacyInformation.newPharmacy.statePlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -870,7 +872,7 @@ function TransferOnline() {
                     required: false,
                   })}
                   placeholder={t(
-                    "pharmacyInformation.newPharmacy.zipCodePlaceholder"
+                    "pharmacyInformation.newPharmacy.zipCodePlaceholder",
                   )}
                   className="w-full mt-1"
                 />
@@ -1007,7 +1009,7 @@ function TransferOnline() {
                 <p className="text-xs text-gray-700">
                   {t("consent.agreementText")}{" "}
                   <Link
-                    href="/policies/Terms of Service.pdf"
+                    href="/policies/terms-of-service"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-peter hover:underline"
@@ -1019,7 +1021,7 @@ function TransferOnline() {
                   </Link>
                   {t("consent.and")}
                   <Link
-                    href="/policies/Privacy Policy.pdf"
+                    href="/policies/privacy-policy"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-peter hover:underline"
@@ -1046,7 +1048,16 @@ function TransferOnline() {
             disabled={isLoading}
             className="w-full bg-peter hover:bg-peter-dark text-white py-3 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? <><p className="flex items-center justify-center gap-2">{t("submitting")}<Loader className="animate-spin size-4 text-white" /></p></> : t("submitButton")}
+            {isLoading ? (
+              <>
+                <p className="flex items-center justify-center gap-2">
+                  {t("submitting")}
+                  <Loader className="animate-spin size-4 text-white" />
+                </p>
+              </>
+            ) : (
+              t("submitButton")
+            )}
           </Button>
         </form>
       </div>

@@ -9,6 +9,8 @@ function PrivacyPolicy() {
   const tPrivacy = useTranslations("policies.privacy");
   const privacyContent = policies?.data?.privacyPolicy || "";
 
+  // console.log("policies ==========>>>>>>", policies);
+
   return (
     <div className="min-h-screen bg-white">
       <Banner
