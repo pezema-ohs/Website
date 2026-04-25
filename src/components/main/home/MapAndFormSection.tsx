@@ -317,7 +317,7 @@ export default function MapAndFormSection() {
     }
   };
 
-  const handlePickupSelect = async (location: Location, address: string) => {
+  const handlePickupSelect = async (location: Location, address: string, name?: string) => {
     if (coverageZipcode.length > 0) {
       const result = await validateAddressCoverage(location, coverageZipcode);
       if (!result.valid) {
@@ -332,12 +332,12 @@ export default function MapAndFormSection() {
     }
     dispatch(setPickupAddress(address));
     dispatch(setPickupLocation(location));
-    dispatch(setPickupName(""));
+    dispatch(setPickupName(name || ""));
     dispatch(setSelectedPharmacy(null));
     setMapSelectionMode(null);
   };
 
-  const handleDropoffSelect = async (location: Location, address: string) => {
+  const handleDropoffSelect = async (location: Location, address: string, name?: string) => {
     if (coverageZipcode.length > 0) {
       const result = await validateAddressCoverage(location, coverageZipcode);
       if (!result.valid) {
@@ -352,7 +352,7 @@ export default function MapAndFormSection() {
     }
     dispatch(setDropoffAddress(address));
     dispatch(setDropoffLocation(location));
-    dispatch(setDropoffName(""));
+    dispatch(setDropoffName(name || ""));
     setMapSelectionMode(null);
   };
 
@@ -460,13 +460,15 @@ export default function MapAndFormSection() {
                       <AddressAutocomplete
                         value={formatDisplayValue(pickupName, pickupAddress)}
                         onChange={(value) => {
-                          // When user types, clear the name and update address
-                          dispatch(setPickupName(""));
-                          // Extract address if format is "Name - Address", otherwise use value as address
-                          const address = value.includes(" - ")
-                            ? value.split(" - ").slice(1).join(" - ")
-                            : value;
-                          dispatch(setPickupAddress(address));
+                          // When user types, extract name and address
+                          if (value.includes(" - ")) {
+                            const [name, ...addressParts] = value.split(" - ");
+                            dispatch(setPickupName(name.trim()));
+                            dispatch(setPickupAddress(addressParts.join(" - ").trim()));
+                          } else {
+                            dispatch(setPickupName(""));
+                            dispatch(setPickupAddress(value));
+                          }
                         }}
                         onSelect={handlePickupSelect}
                         placeholder={tForm("pickupLocation")}
@@ -509,13 +511,15 @@ export default function MapAndFormSection() {
                       <AddressAutocomplete
                         value={formatDisplayValue(dropoffName, dropoffAddress)}
                         onChange={(value) => {
-                          // When user types, clear the name and update address
-                          dispatch(setDropoffName(""));
-                          // Extract address if format is "Name - Address", otherwise use value as address
-                          const address = value.includes(" - ")
-                            ? value.split(" - ").slice(1).join(" - ")
-                            : value;
-                          dispatch(setDropoffAddress(address));
+                          // When user types, extract name and address
+                          if (value.includes(" - ")) {
+                            const [name, ...addressParts] = value.split(" - ");
+                            dispatch(setDropoffName(name.trim()));
+                            dispatch(setDropoffAddress(addressParts.join(" - ").trim()));
+                          } else {
+                            dispatch(setDropoffName(""));
+                            dispatch(setDropoffAddress(value));
+                          }
                         }}
                         onSelect={handleDropoffSelect}
                         placeholder={tForm("dropoffAddress")}

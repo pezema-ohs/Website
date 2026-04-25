@@ -40,13 +40,13 @@ interface WithAuthOptions {
  */
 function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>,
-  options: WithAuthOptions = {}
+  options: WithAuthOptions = {},
 ) {
   const {
     allowedRoles = [],
     redirectTo = "/auth/login",
     requireAuth = true,
-    protectedRoute,
+    // protectedRoute,
   } = options;
 
   function AuthenticatedComponent(props: P) {
@@ -85,9 +85,9 @@ function withAuth<P extends object>(
           // If authentication is required but user is not authenticated
           if (!hasToken && !isLoggedIn) {
             // console.log("withAuth: Not authenticated, redirecting to login");
-            // Include current path as redirect parameter 
+            // Include current path as redirect parameter
             const loginUrl = `${redirectTo}?redirect=${encodeURIComponent(
-              pathname
+              pathname,
             )}`;
             router.push(loginUrl);
             setIsChecking(false);
@@ -220,8 +220,9 @@ function withAuth<P extends object>(
   }
 
   // Set display name for debugging
-  AuthenticatedComponent.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || "Component"
-    })`;
+  AuthenticatedComponent.displayName = `withAuth(${
+    WrappedComponent.displayName || WrappedComponent.name || "Component"
+  })`;
 
   return AuthenticatedComponent;
 }

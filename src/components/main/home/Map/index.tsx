@@ -19,8 +19,8 @@ interface MapComponentProps {
   onPharmacySelect?: (pharmacy: Pharmacy) => void;
   showRoute?: boolean;
   height?: string;
-  onPickupSelect?: (location: Location, address: string) => void;
-  onDropoffSelect?: (location: Location, address: string) => void;
+  onPickupSelect?: (location: Location, address: string, name?: string) => void;
+  onDropoffSelect?: (location: Location, address: string, name?: string) => void;
   selectionMode?: "pickup" | "dropoff" | null;
   onDistanceCalculated?: (distance: string, duration: string) => void;
   /** When this key changes, local pickup/dropoff markers are cleared (e.g. after closing out-of-coverage modal). */

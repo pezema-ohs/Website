@@ -6,7 +6,7 @@ import { PiMapPin } from "react-icons/pi";
 interface AddressAutocompleteProps {
   value: string;
   onChange: (value: string) => void;
-  onSelect: (location: Location, address: string) => void;
+  onSelect: (location: Location, address: string, name?: string) => void;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
@@ -207,8 +207,8 @@ export default function AddressAutocomplete({
     }
   };
 
-  const handleSelect = async (placeId: string, description: string) => {
-    onChange(description);
+  const handleSelect = async (placeId: string, description: string, name?: string) => {
+    onChange(name && name !== description ? `${name} - ${description}` : description);
     setShowSuggestions(false);
 
     // Get place details to get coordinates
@@ -220,7 +220,7 @@ export default function AddressAutocomplete({
       service.getDetails(
         {
           placeId,
-          fields: ["geometry", "formatted_address"],
+          fields: ["geometry", "formatted_address", "name"],
         },
         (place, status) => {
           if (
@@ -232,7 +232,9 @@ export default function AddressAutocomplete({
               lng: place.geometry.location.lng(),
               address: place.formatted_address || description,
             };
-            onSelect(location, place.formatted_address || description);
+            // Use name from details if available, otherwise fallback to name from suggestion
+            const finalName = place.name || name;
+            onSelect(location, place.formatted_address || description, finalName);
           }
         }
       );
@@ -258,7 +260,8 @@ export default function AddressAutocomplete({
         if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
           handleSelect(
             suggestions[selectedIndex].place_id,
-            suggestions[selectedIndex].description
+            suggestions[selectedIndex].description,
+            suggestions[selectedIndex].structured_formatting.main_text
           );
         }
         break;
@@ -344,7 +347,7 @@ export default function AddressAutocomplete({
             <li
               key={suggestion.place_id}
               onClick={() =>
-                handleSelect(suggestion.place_id, suggestion.description)
+                handleSelect(suggestion.place_id, suggestion.description, suggestion.structured_formatting.main_text)
               }
               className={`px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors ${index === selectedIndex ? "bg-peter/10" : ""
                 }`}
