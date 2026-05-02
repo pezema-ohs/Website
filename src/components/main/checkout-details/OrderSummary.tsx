@@ -46,7 +46,7 @@ const parseDistance = (distanceStr: string): number => {
 
   // Extract number and unit from strings like "10 mi", "295 ft", "5.5 km", etc.
   const match = distanceStr.match(
-    /(\d+\.?\d*)\s*(ft|feet|mi|miles|m|meters|km|kilometers|km|kilometres)?/i
+    /(\d+\.?\d*)\s*(ft|feet|mi|miles|m|meters|km|kilometers|km|kilometres)?/i,
   );
 
   if (!match) return 0;
@@ -80,7 +80,7 @@ const parseDistance = (distanceStr: string): number => {
 // Check if the selected time is during rush hour (11AM-1PM & 4PM-6PM on weekdays)
 const isRushHour = (
   selectedTime: string | null,
-  selectedDate: string | null
+  selectedDate: string | null,
 ): boolean => {
   if (!selectedTime || !selectedDate) return false;
 
@@ -128,7 +128,7 @@ const calculateDeliveryFee = (
   distance: string,
   selectedTime: string | null,
   selectedDate: string | null,
-  isPartnerPharmacy: boolean = false
+  isPartnerPharmacy: boolean = false,
 ): number => {
   // Partner pharmacies have $0 delivery fee
   if (isPartnerPharmacy) {
@@ -276,20 +276,33 @@ export default function OrderSummary({
     dispatch,
   ]);
 
+  // Campus Pharmacy exact identifiers
+  const CAMPUS_PHARMACY_NAME = "campus pharmacy";
+  const CAMPUS_PHARMACY_ADDRESS = "195 central ave, newark, nj 07103, usa";
+
   // Calculate prices
   const prices = useMemo(() => {
+    // Check if pickup is Campus Pharmacy by matching name OR exact address (case-insensitive)
+    const pickupNameLower = checkoutData.pickupName?.toLowerCase().trim() ?? "";
+    const pickupAddressLower = checkoutData.pickupAddress?.toLowerCase().trim() ?? "";
+
+    const isManualCampusPharmacy =
+      pickupNameLower.includes(CAMPUS_PHARMACY_NAME) ||
+      pickupAddressLower.includes(CAMPUS_PHARMACY_ADDRESS);
+
+    const effectiveIsPartner =
+      checkoutData.isPartnerPharmacy || isManualCampusPharmacy;
+
     // Calculate original delivery fee (what it would be without partner discount)
     const originalDeliveryFee = calculateDeliveryFee(
       checkoutData.distance,
       checkoutData.selectedTime,
       checkoutData.selectedDate,
-      false // Calculate as if not a partner pharmacy
+      false, // Calculate as if not a partner pharmacy
     );
 
     // Actual delivery fee (0 for partner pharmacy, original for non-partner)
-    const deliveryFee = checkoutData.isPartnerPharmacy
-      ? 0
-      : originalDeliveryFee;
+    const deliveryFee = effectiveIsPartner ? 0 : originalDeliveryFee;
 
     const serviceFee = 1.19; // Fixed service fee
     const total = deliveryFee + serviceFee;
@@ -299,12 +312,15 @@ export default function OrderSummary({
       originalDeliveryFee, // For display purposes when partner pharmacy
       serviceFee,
       total,
+      isPartner: effectiveIsPartner,
     };
   }, [
     checkoutData.distance,
     checkoutData.selectedTime,
     checkoutData.selectedDate,
     checkoutData.isPartnerPharmacy,
+    checkoutData.pickupName,
+    checkoutData.pickupAddress,
   ]);
 
   // Handle checkout payment
@@ -332,21 +348,22 @@ export default function OrderSummary({
           | "guest",
         pickupAddress: formatAddressWithName(
           checkoutData.pickupName,
-          checkoutData.pickupAddress
+          checkoutData.pickupAddress,
         ),
         deliveryAddress: formatAddressWithName(
           checkoutData.dropoffName,
-          checkoutData.dropoffAddress
+          checkoutData.dropoffAddress,
         ),
         deliveryDate: formatDateToAPI(checkoutData.selectedDate),
         deliveryTime: convertTimeTo24Hour(checkoutData.selectedTime || ""),
         email: checkoutData.email || formData.email,
         phone: checkoutData.contactNumber || formData.contactNumber,
-        legalName: `${checkoutData.firstName || formData.firstName} ${checkoutData.lastName || formData.lastName
-          }`,
+        legalName: `${checkoutData.firstName || formData.firstName} ${
+          checkoutData.lastName || formData.lastName
+        }`,
         deliveryInstruction: checkoutData.additionalInstructions || "",
         dateOfBirth: formatDateToAPI(
-          checkoutData.dateOfBirth || formData.dateOfBirth
+          checkoutData.dateOfBirth || formData.dateOfBirth,
         ),
         amount: prices.total,
         serviceCharge: prices.serviceFee,
@@ -568,12 +585,11 @@ export default function OrderSummary({
                 {t("priceDetails.deliveryFee")}
               </span>
               <div className="flex items-center gap-2">
-                {checkoutData.isPartnerPharmacy &&
-                  prices.originalDeliveryFee > 0 && (
-                    <span className="text-gray-400 line-through text-sm">
-                      ${prices.originalDeliveryFee.toFixed(2)}
-                    </span>
-                  )}
+                {prices.isPartner && prices.originalDeliveryFee > 0 && (
+                  <span className="text-gray-400 line-through text-sm">
+                    ${prices.originalDeliveryFee.toFixed(2)}
+                  </span>
+                )}
                 <span className="font-medium">
                   ${prices.deliveryFee.toFixed(2)}
                 </span>
@@ -626,7 +642,7 @@ export default function OrderSummary({
           >
             {t("legalAgreement.text")}{" "}
             <Link
-              href="/policies/Terms of Service.pdf"
+              href="/policies/terms-of-service"
               target="_blank"
               rel="noopener noreferrer"
               className="text-peter hover:underline"
@@ -638,7 +654,7 @@ export default function OrderSummary({
             </Link>
             , {t("legalAgreement.acknowledge")}{" "}
             <Link
-              href="/policies/Privacy Policy.pdf"
+              href="/policies/privacy-policy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-peter hover:underline"
@@ -659,12 +675,22 @@ export default function OrderSummary({
         <Button
           onClick={handleCompletePayment}
           disabled={isSubmitting || !termsAgreed}
-          className={`w-full py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed ${termsAgreed && !isSubmitting
-            ? "bg-peter hover:bg-peter-dark text-white"
-            : "bg-gray-300 text-gray-500"
-            }`}
+          className={`w-full py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed ${
+            termsAgreed && !isSubmitting
+              ? "bg-peter hover:bg-peter-dark text-white"
+              : "bg-gray-300 text-gray-500"
+          }`}
         >
-          {isSubmitting ? <><p className="flex items-center justify-center gap-2">Processing...<Loader className="animate-spin size-4 text-peter" /></p></> : t("completePayment")}
+          {isSubmitting ? (
+            <>
+              <p className="flex items-center justify-center gap-2">
+                Processing...
+                <Loader className="animate-spin size-4 text-peter" />
+              </p>
+            </>
+          ) : (
+            t("completePayment")
+          )}
         </Button>
       </div>
 
